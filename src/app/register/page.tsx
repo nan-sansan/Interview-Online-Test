@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { useAuthStore } from "@/stores/userStore";
 import { toast } from "sonner";
+import { useUserPoolStore } from "@/stores/userPoolStore";
 
 type User = {
   id: string;
@@ -20,7 +21,7 @@ export default function RegisterPage() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [gender, setGender] = useState("O");
-  const { register } = useAuthStore();
+  const { register } = useUserPoolStore();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const regex = /^[A-Za-z0-9]*$/; // 正則表達，只允許英文&數字
