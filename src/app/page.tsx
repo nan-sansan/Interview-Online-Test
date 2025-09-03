@@ -10,10 +10,10 @@ export default function WelcomePage() {
     { path: "/login", display: "登入" },
     { path: "/userList", display: "用戶列表" },
   ];
-  const { user } = useAuthStore();
+  const { name } = useAuthStore();
   return (
     <div className="w-[70vw] p-[20px] mx-auto shadow-md flex flex-col items-center justify-center gap-5 rounded-md bg-indigo-50/50">
-      {user && user.name ? <h1 className="text-xl">HI！{user?.name}</h1> : ""}
+      {name && name ? <h1 className="text-xl">HI！{name}</h1> : ""}
       <div className="flex gap-6">
         {workRoute.map((route, index) => (
           <Link href={route.path} key={index}>

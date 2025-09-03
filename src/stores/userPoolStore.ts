@@ -5,6 +5,8 @@ import { User } from "@/types/User";
 interface UserPoolStore {
   users: User[];
   register: (user: User) => boolean;
+  getAllUser: () => User[];
+  verifyUser: (loginName: string, loginEmail: string) => boolean;
 }
 
 export const useUserPoolStore = create<UserPoolStore>()(
@@ -25,6 +27,20 @@ export const useUserPoolStore = create<UserPoolStore>()(
           set({ users: [...users, { ...newUser, id: newId }] });
           return true;
         }
+      },
+      getAllUser: () => {
+        const { users } = get();
+        return users;
+      },
+      verifyUser: (loginName, loginEmail) => {
+        const { users } = get();
+        if (users.length === 0) {
+          return false; //無使用者資料
+        }
+        //找到使用者名稱後驗證使用者輸入的email是否相同
+        return users.some(
+          (user) => user.name === loginName && user.email === loginEmail,
+        );
       },
     }),
     { name: "userPool-storage" },

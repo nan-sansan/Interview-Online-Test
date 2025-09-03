@@ -1,0 +1,70 @@
+"use client";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import { useState } from "react";
+import { toast } from "sonner";
+import { useUserPoolStore } from "@/stores/userPoolStore";
+import { useRouter } from "next/navigation";
+import { useAuthStore } from "@/stores/userStore";
+
+export default function LoginPage() {
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const { verifyUser } = useUserPoolStore();
+  const router = useRouter();
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const regex = /^[A-Za-z0-9]*$/; // 正則表達，只允許英文&數字
+    if (regex.test(e.target.value)) {
+      setUsername(e.target.value);
+    }
+  };
+  const handleSubmit = () => {
+    if (!username || !email) {
+      toast.error("Please enter name and email");
+    }
+    if (verifyUser(username, email)) {
+      toast.success("User login successfully!");
+      useAuthStore.getState().login(username.trim());
+      router.push("/");
+    } else {
+      toast.error("Please enter valid name or email");
+    }
+  };
+
+  return (
+    <div className="w-[500px] mx-auto flex flex-col gap-5 p-[20px] rounded-md shadow-xs">
+      <>
+        <Label htmlFor="acc">請輸入帳號名稱</Label>
+        <Input
+          id="acc"
+          type="text"
+          placeholder="註冊的帳號名稱，僅限英文數字"
+          value={username}
+          onChange={handleInputChange}
+        ></Input>
+        <Label htmlFor="acc">請輸入電子郵件</Label>
+        <Input
+          id="acc"
+          type="text"
+          placeholder="註冊的電子郵件"
+          value={email}
+          onChange={(e) => {
+            setEmail(e.target.value);
+          }}
+        ></Input>
+        <div className="flex justify-end">
+          <Button
+            className="w-20"
+            onClick={() => {
+              handleSubmit();
+            }}
+          >
+            送出
+          </Button>
+        </div>
+      </>
+    </div>
+  );
+}

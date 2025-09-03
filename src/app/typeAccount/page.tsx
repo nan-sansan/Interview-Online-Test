@@ -5,18 +5,19 @@ import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import { useAuthStore } from "@/stores/userStore";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 export default function TypeAccount() {
   const [value, setValue] = useState("");
   const [submitted, setSubmitted] = useState("");
   const router = useRouter();
-  const { user } = useAuthStore();
+  const { name } = useAuthStore();
 
   useEffect(() => {
-    if (user) {
+    if (name) {
       router.push("/");
     }
-  }, [user, router]);
+  }, [name, router]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const regex = /^[A-Za-z0-9]*$/; // 正則表達，只允許英文&數字
@@ -26,9 +27,12 @@ export default function TypeAccount() {
   };
 
   const handleSubmit = () => {
-    if (!value.trim()) return;
+    if (!value.trim()) {
+      toast.error("Please enter a valid name!");
+      return;
+    }
     setSubmitted(value.trim());
-    useAuthStore.getState().login({ name: value.trim() });
+    useAuthStore.getState().login(value.trim());
     setTimeout(() => {
       router.push("/");
     }, 1000);
