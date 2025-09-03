@@ -15,10 +15,10 @@ export default function WelcomePage() {
   const { name, logout } = useAuthStore();
   return (
     <div className="flex w-full h-full items-center justify-center">
-      <div className="w-[800px] h-[300px] p-[20px] mx-auto flex flex-col items-center justify-center gap-5 rounded-md">
-        {name && name ? (
-          <div className="flex justify-center items-center">
-            <h1 className="text-xl my-10">HI！{name}</h1>
+      <div className="w-[800px] p-[20px] mx-auto flex flex-col items-center justify-center gap-5 rounded-md">
+        {name && (
+          <div className="flex justify-center items-center gap-1">
+            <h1 className="text-3xl font-bold">HI！{name} 歡迎回來</h1>
             <Button
               variant="ghost"
               onClick={() => {
@@ -28,8 +28,6 @@ export default function WelcomePage() {
               <LogOut></LogOut>
             </Button>
           </div>
-        ) : (
-          ""
         )}
         <div className="flex gap-6">
           {workRoute.map((route, index) => (
