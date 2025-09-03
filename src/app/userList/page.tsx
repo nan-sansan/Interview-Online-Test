@@ -50,55 +50,58 @@ export default function ListPage() {
   }
   return (
     <div className="flex flex-col w-full h-full items-center justify-between gap-5 py-10">
-      <Table className="w-[1000px] mx-auto p-[20px] ">
-        <TableHeader>
-          <TableRow>
-            <TableHead>帳號</TableHead>
-            <TableHead>電子郵件</TableHead>
-            <TableHead>性別</TableHead>
-            <TableHead>狀態</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {users &&
-            users.map((user) => (
-              <TableRow key={user.id}>
-                <TableCell>{user.name}</TableCell>
-                <TableCell>{user.email}</TableCell>
-                <TableCell>{user.gender}</TableCell>
-                <TableCell>
-                  <Select
-                    defaultValue={user.status}
-                    onValueChange={async (value: "active" | "inactive") =>
-                      await updateUsersApi({ ...user, status: value })
-                    }
-                  >
-                    <SelectTrigger className="w-[180px]">
-                      <SelectValue placeholder="選擇狀態" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectGroup>
-                        <SelectLabel>狀態</SelectLabel>
-                        <SelectItem value="active">活躍帳戶</SelectItem>
-                        <SelectItem value="inactive">非活躍帳戶</SelectItem>
-                      </SelectGroup>
-                    </SelectContent>
-                  </Select>
-                </TableCell>
-                <TableCell>
-                  <Button
-                    variant="destructive"
-                    onClick={() => {
-                      handleDelete(user.id, user.name);
-                    }}
-                  >
-                    刪除
-                  </Button>
-                </TableCell>
-              </TableRow>
-            ))}
-        </TableBody>
-      </Table>
+      <div className="flex-1 bg-white/60 p-6 rounded-md shadow-xs">
+        <h1 className="text-2xl p-2 font-bold">用戶列表</h1>
+        <Table className="w-[1000px] mx-auto p-[20px] ">
+          <TableHeader>
+            <TableRow>
+              <TableHead>帳號</TableHead>
+              <TableHead>電子郵件</TableHead>
+              <TableHead>性別</TableHead>
+              <TableHead>狀態</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {users &&
+              users.map((user) => (
+                <TableRow key={user.id}>
+                  <TableCell>{user.name}</TableCell>
+                  <TableCell>{user.email}</TableCell>
+                  <TableCell>{user.gender}</TableCell>
+                  <TableCell>
+                    <Select
+                      defaultValue={user.status}
+                      onValueChange={async (value: "active" | "inactive") =>
+                        await updateUsersApi({ ...user, status: value })
+                      }
+                    >
+                      <SelectTrigger className="w-[180px]">
+                        <SelectValue placeholder="選擇狀態" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectGroup>
+                          <SelectLabel>狀態</SelectLabel>
+                          <SelectItem value="active">活躍帳戶</SelectItem>
+                          <SelectItem value="inactive">非活躍帳戶</SelectItem>
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
+                  </TableCell>
+                  <TableCell>
+                    <Button
+                      variant="destructive"
+                      onClick={() => {
+                        handleDelete(user.id, user.name);
+                      }}
+                    >
+                      刪除
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+          </TableBody>
+        </Table>
+      </div>
       <div className="flex gap-2">
         <Select onValueChange={(value) => setSize(Number(value))}>
           <SelectTrigger>{size}</SelectTrigger>

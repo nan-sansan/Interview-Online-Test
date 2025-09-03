@@ -35,7 +35,8 @@ export default function LoginPage() {
 
   return (
     <div className="flex w-full h-full items-center justify-center ">
-      <div className="w-[500px] mx-auto flex flex-col gap-5 p-[20px] rounded-md shadow-xs ">
+      <div className="w-[500px] h-[300px] bg-white/60 mx-auto flex flex-col gap-5 p-[20px] rounded-md shadow-xs ">
+        <h1 className="text-2xl font-bold">登入</h1>
         <>
           <Label htmlFor="acc">請輸入帳號名稱</Label>
           <Input

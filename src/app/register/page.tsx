@@ -50,8 +50,10 @@ export default function RegisterPage() {
   };
   return (
     <div className="flex w-full h-full items-center justify-center ">
-      <div className="w-[500px] mx-auto flex flex-col gap-5 p-[20px] rounded-md shadow-xs">
-        <h1 className="text-xl">註冊</h1>
+      <div className="bg-white/60  w-[500px] mx-auto flex flex-col gap-5 p-[20px] rounded-md shadow-xs">
+        <>
+          <h1 className="text-2xl font-bold">註冊</h1>
+        </>
         <div>
           <Label htmlFor="acc">請輸入註冊帳號</Label>
           <Input
