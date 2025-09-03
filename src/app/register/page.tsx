@@ -39,12 +39,8 @@ export default function RegisterPage() {
       return;
     }
 
-    const lastId = Number(localStorage.getItem("lastId") || "0");
-    const newId = (lastId + 1).toString();
-    localStorage.setItem("lastId", newId);
-
     const newUser: User = {
-      id: newId,
+      id: "",
       name: name,
       email: email,
       gender: gender,

@@ -1,10 +1,6 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-
-interface User {
-  name: string;
-  email: string;
-}
+import { User } from "@/types/User";
 
 interface UserPoolStore {
   users: User[];
@@ -23,7 +19,10 @@ export const useUserPoolStore = create<UserPoolStore>()(
         if (user) {
           return false;
         } else {
-          set({ users: [...users, newUser] });
+          const lastId = Number(localStorage.getItem("lastId") || "0");
+          const newId = (lastId + 1).toString();
+          localStorage.setItem("lastId", newId);
+          set({ users: [...users, { ...newUser, id: newId }] });
           return true;
         }
       },
