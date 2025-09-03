@@ -2,7 +2,7 @@
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/stores/userStore";
@@ -13,6 +13,13 @@ export default function LoginPage() {
   const [email, setEmail] = useState("");
   const { login } = useAuthStore();
   const router = useRouter();
+  const { name } = useAuthStore();
+
+  useEffect(() => {
+    if (name) {
+      router.push("/");
+    }
+  }, [name, router]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const regex = /^[A-Za-z0-9]*$/; // 正則表達，只允許英文&數字
