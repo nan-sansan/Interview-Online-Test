@@ -28,7 +28,7 @@ export default function TypeAccount() {
 
   const handleSubmit = () => {
     if (!value.trim()) {
-      toast.error("Please enter a valid name!");
+      toast.error("請輸入有效帳號");
       return;
     }
     setSubmitted(value.trim());

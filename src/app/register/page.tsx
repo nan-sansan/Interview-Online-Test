@@ -5,7 +5,6 @@ import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
-import { useAuthStore } from "@/stores/userStore";
 import { toast } from "sonner";
 import { useUserPoolStore } from "@/stores/userPoolStore";
 import { useRouter } from "next/navigation";
@@ -33,11 +32,11 @@ export default function RegisterPage() {
   };
   const HandleSubmit = () => {
     if (!name) {
-      toast.error("Please enter your name");
+      toast.error("請輸入帳號名稱");
       return;
     }
     if (!email) {
-      toast.error("Please enter your email");
+      toast.error("請輸入電子郵件");
       return;
     }
 
@@ -50,9 +49,9 @@ export default function RegisterPage() {
     };
 
     if (!register(newUser)) {
-      toast.error("Register Failed!");
+      toast.error("註冊失敗");
     } else {
-      toast.success("Register successful");
+      toast.success("註冊成功");
       //註冊完直接登入
       router.push("/login");
     }

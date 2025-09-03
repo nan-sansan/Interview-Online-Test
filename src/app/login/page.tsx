@@ -22,14 +22,14 @@ export default function LoginPage() {
   };
   const handleSubmit = () => {
     if (!username || !email) {
-      toast.error("Please enter name and email");
+      toast.error("請輸入帳號與電子郵件");
     }
     if (verifyUser(username, email)) {
-      toast.success("User login successfully!");
+      toast.success("登入成功");
       useAuthStore.getState().login(username.trim());
       router.push("/");
     } else {
-      toast.error("Please enter valid name or email");
+      toast.error("請輸入有效帳號或電子郵件");
     }
   };
 
