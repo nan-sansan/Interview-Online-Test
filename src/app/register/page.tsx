@@ -54,7 +54,7 @@ export default function RegisterPage() {
         <>
           <h1 className="text-2xl font-bold">註冊</h1>
         </>
-        <div>
+        <div className="flex flex-col gap-3 ">
           <Label htmlFor="acc">請輸入註冊帳號</Label>
           <Input
             id="acc"
@@ -66,7 +66,7 @@ export default function RegisterPage() {
             }}
           />
         </div>
-        <div>
+        <div className="flex flex-col gap-3 ">
           <Label htmlFor="email">請輸入註冊電子郵件</Label>
           <Input
             id="email"
@@ -77,7 +77,7 @@ export default function RegisterPage() {
             }}
           />
         </div>
-        <div>
+        <div className="flex flex-col gap-3">
           請輸入性別
           <RadioGroup
             className="flex"
