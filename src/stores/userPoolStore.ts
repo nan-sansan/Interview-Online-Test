@@ -7,6 +7,8 @@ interface UserPoolStore {
   register: (user: User) => boolean;
   getAllUser: () => User[];
   verifyUser: (loginName: string, loginEmail: string) => boolean;
+  deleteUser: (userId: string) => void;
+  updateUser: (userId: string, status: string) => void;
 }
 
 export const useUserPoolStore = create<UserPoolStore>()(
@@ -41,6 +43,20 @@ export const useUserPoolStore = create<UserPoolStore>()(
         return users.some(
           (user) => user.name === loginName && user.email === loginEmail,
         );
+      },
+      deleteUser: (userId) => {
+        const { users } = get();
+        set({
+          users: users.filter((user) => user.id !== userId),
+        });
+      },
+      updateUser: (userId: string, status: string) => {
+        const { users } = get();
+        set({
+          users: users.map((user) =>
+            user.id === userId ? { ...user, status } : user,
+          ),
+        });
       },
     }),
     { name: "userPool-storage" },
