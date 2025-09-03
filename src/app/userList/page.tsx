@@ -49,9 +49,9 @@ export default function ListPage() {
     }
   }
   return (
-    <div className="flex flex-col w-full h-full items-center justify-between gap-5 py-10">
-      <div className="flex-1 bg-white/60 p-6 rounded-md shadow-xs">
-        <h1 className="text-2xl p-2 font-bold">用戶列表</h1>
+    <div className="flex flex-col w-full h-full items-center justify-between gap-5 py-10 ">
+      <h1 className="text-2xl  font-bold w-[1000px]">用戶列表</h1>
+      <div className="flex-1 bg-white/60 p-3 rounded-md shadow-xs overflow-y-auto">
         <Table className="w-[1000px] mx-auto p-[20px] ">
           <TableHeader>
             <TableRow>
@@ -106,7 +106,7 @@ export default function ListPage() {
         <Select onValueChange={(value) => setSize(Number(value))}>
           <SelectTrigger>{size}</SelectTrigger>
           <SelectContent>
-            {["1", "10", "15", "20", "50"].map((item) => (
+            {["5", "10", "15", "20", "50"].map((item) => (
               <SelectItem key={item} value={item}>
                 {item}
               </SelectItem>
@@ -122,7 +122,7 @@ export default function ListPage() {
         </Button>
         <Button
           variant="outline"
-          disabled={page === Math.floor(total / size)}
+          disabled={page === Math.ceil(total / size) - 1}
           onClick={() => setPage(page + 1)}
         >
           下一頁
