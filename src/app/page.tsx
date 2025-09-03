@@ -2,6 +2,8 @@
 
 import { useAuthStore } from "@/stores/userStore";
 import Link from "next/link";
+import { LogOut } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 export default function WelcomePage() {
   const workRoute = [
@@ -10,18 +12,34 @@ export default function WelcomePage() {
     { path: "/login", display: "登入" },
     { path: "/userList", display: "用戶列表" },
   ];
-  const { name } = useAuthStore();
+  const { name, logout } = useAuthStore();
   return (
-    <div className="w-[70vw] p-[20px] mx-auto shadow-md flex flex-col items-center justify-center gap-5 rounded-md bg-indigo-50/50">
-      {name && name ? <h1 className="text-xl">HI！{name}</h1> : ""}
-      <div className="flex gap-6">
-        {workRoute.map((route, index) => (
-          <Link href={route.path} key={index}>
-            <div className="w-30 h-20 shadow-md flex items-center justify-center text-xl bg-white rounded-md hover:bg-gray-50/50">
-              {route.display}
-            </div>
-          </Link>
-        ))}
+    <div className="flex w-full h-full items-center justify-center">
+      <div className="w-[800px] h-[300px] p-[20px] mx-auto flex flex-col items-center justify-center gap-5 rounded-md">
+        {name && name ? (
+          <div className="flex justify-center items-center">
+            <h1 className="text-xl my-10">HI！{name}</h1>
+            <Button
+              variant="ghost"
+              onClick={() => {
+                logout();
+              }}
+            >
+              <LogOut></LogOut>
+            </Button>
+          </div>
+        ) : (
+          ""
+        )}
+        <div className="flex gap-6">
+          {workRoute.map((route, index) => (
+            <Link href={route.path} key={index}>
+              <div className="w-40 h-30  flex items-center justify-center text-xl  rounded-md hover:bg-gray-50/10 hover:shadow-sm">
+                {route.display}
+              </div>
+            </Link>
+          ))}
+        </div>
       </div>
     </div>
   );

@@ -4,14 +4,14 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { toast } from "sonner";
-import { useUserPoolStore } from "@/stores/userPoolStore";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/stores/userStore";
+import { loginApi } from "@/apis/auth";
 
 export default function LoginPage() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
-  const { verifyUser } = useUserPoolStore();
+  const { login } = useAuthStore();
   const router = useRouter();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -20,13 +20,13 @@ export default function LoginPage() {
       setUsername(e.target.value);
     }
   };
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!username || !email) {
       toast.error("請輸入帳號與電子郵件");
     }
-    if (verifyUser(username, email)) {
+    if (await loginApi(username, email)) {
       toast.success("登入成功");
-      useAuthStore.getState().login(username.trim());
+      login(username.trim());
       router.push("/");
     } else {
       toast.error("請輸入有效帳號或電子郵件");
@@ -34,37 +34,39 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="w-[500px] mx-auto flex flex-col gap-5 p-[20px] rounded-md shadow-xs">
-      <>
-        <Label htmlFor="acc">請輸入帳號名稱</Label>
-        <Input
-          id="acc"
-          type="text"
-          placeholder="註冊的帳號名稱，僅限英文數字"
-          value={username}
-          onChange={handleInputChange}
-        ></Input>
-        <Label htmlFor="acc">請輸入電子郵件</Label>
-        <Input
-          id="acc"
-          type="text"
-          placeholder="註冊的電子郵件"
-          value={email}
-          onChange={(e) => {
-            setEmail(e.target.value);
-          }}
-        ></Input>
-        <div className="flex justify-end">
-          <Button
-            className="w-20"
-            onClick={() => {
-              handleSubmit();
+    <div className="flex w-full h-full items-center justify-center ">
+      <div className="w-[500px] mx-auto flex flex-col gap-5 p-[20px] rounded-md shadow-xs ">
+        <>
+          <Label htmlFor="acc">請輸入帳號名稱</Label>
+          <Input
+            id="acc"
+            type="text"
+            placeholder="註冊的帳號名稱，僅限英文數字"
+            value={username}
+            onChange={handleInputChange}
+          ></Input>
+          <Label htmlFor="acc">請輸入電子郵件</Label>
+          <Input
+            id="acc"
+            type="text"
+            placeholder="註冊的電子郵件"
+            value={email}
+            onChange={(e) => {
+              setEmail(e.target.value);
             }}
-          >
-            送出
-          </Button>
-        </div>
-      </>
+          ></Input>
+          <div className="flex justify-end">
+            <Button
+              className="w-20"
+              onClick={() => {
+                handleSubmit();
+              }}
+            >
+              送出
+            </Button>
+          </div>
+        </>
+      </div>
     </div>
   );
 }
