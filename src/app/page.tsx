@@ -32,8 +32,10 @@ export default function WelcomePage() {
         <div className="flex gap-6">
           {workRoute.map((route, index) => (
             <Link href={route.path} key={index}>
-              <div className="w-40 h-30  flex items-center justify-center text-xl  rounded-md hover:bg-gray-50/10 hover:shadow-sm">
-                {route.display}
+              <div className="card-image w-[150px] h-[150px] pb-3 pr-3 flex items-end justify-end text-xl  rounded-md hover:shadow-sm">
+                <div className=" border-b border-green-950 pl-5">
+                  {route.display}
+                </div>
               </div>
             </Link>
           ))}
