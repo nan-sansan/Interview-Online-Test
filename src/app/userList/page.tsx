@@ -58,7 +58,7 @@ export default function ListPage() {
               <TableHead>帳號</TableHead>
               <TableHead>電子郵件</TableHead>
               <TableHead>性別</TableHead>
-              <TableHead>狀態</TableHead>
+              <TableHead colSpan={2}>狀態</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
