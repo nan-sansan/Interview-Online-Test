@@ -2,10 +2,13 @@
 import { usePathname, useRouter } from "next/navigation";
 import { workRoute } from "@/config/config";
 import { cn } from "@/lib/utils";
+import { useAuthStore } from "@/stores/userStore";
+import { toast } from "sonner";
 
 export default function Sidebar() {
   const router = useRouter();
   const currentPath = usePathname();
+  const { name } = useAuthStore();
 
   return (
     <ul className="w-[150px] h-full bg-yellow-50/50 flex flex-col border-r">
@@ -19,6 +22,10 @@ export default function Sidebar() {
             )}
             key={index}
             onClick={() => {
+              if (name && route.loginDisable) {
+                toast.error("您已登入");
+                return;
+              }
               router.push(route.path);
             }}
           >

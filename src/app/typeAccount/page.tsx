@@ -25,6 +25,7 @@ export default function TypeAccount() {
           <div className="text-xl font-bold text-center">Hi, {submitted}!</div>
         )}
         <>
+          <form></form>
           <Label htmlFor="acc">請輸入名稱</Label>
           <Input
             id="acc"

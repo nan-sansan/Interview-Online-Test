@@ -14,11 +14,12 @@ export const getUsersApi = async (
 };
 
 export const updateUsersApi = async (user: User) => {
-  await apiClient({
+  const res = await apiClient({
     method: "PUT",
     url: "/api/users/" + user.id,
     data: user,
   });
+  return res.data as { user: User; message: string };
 };
 
 export const deleteUsersApi = async (id: string) => {
@@ -29,14 +30,10 @@ export const deleteUsersApi = async (id: string) => {
 };
 
 export const addUserApi = async (user: User) => {
-  try {
-    await apiClient({
-      method: "POST",
-      url: "/api/users",
-      data: user,
-    });
-    return true;
-  } catch {
-    return false;
-  }
+  const res = await apiClient({
+    method: "POST",
+    url: "/api/users",
+    data: user,
+  });
+  return res.data as { user: User; message: string };
 };

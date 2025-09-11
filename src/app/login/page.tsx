@@ -1,19 +1,30 @@
 "use client";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { useEffect, useState } from "react";
-import { toast } from "sonner";
+import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/stores/userStore";
-import { loginApi } from "@/apis/auth";
+import { useForm } from "react-hook-form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { User } from "@/types/User";
+import { useUserRepo } from "@/hooks/useUserRepo";
+import { toast } from "sonner";
 
 export default function LoginPage() {
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-  const { login } = useAuthStore();
   const router = useRouter();
-  const { name } = useAuthStore();
+  const { name, login } = useAuthStore();
+  const form = useForm<User>({
+    defaultValues: { name: "", email: "" },
+    mode: "onChange",
+  });
+  const userRepo = useUserRepo();
 
   useEffect(() => {
     if (name) {
@@ -21,58 +32,75 @@ export default function LoginPage() {
     }
   }, [name, router]);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const regex = /^[A-Za-z0-9]*$/; // 正則表達，只允許英文&數字
-    if (regex.test(e.target.value)) {
-      setUsername(e.target.value);
-    }
-  };
-  const handleSubmit = async () => {
-    if (!username || !email) {
-      toast.error("請輸入帳號與電子郵件");
-    }
-    if (await loginApi(username, email)) {
-      toast.success("登入成功");
-      login(username.trim());
-      router.push("/");
-    } else {
-      toast.error("請輸入有效帳號或電子郵件");
-    }
-  };
+  const onSubmit = async (values: User) => {
+    console.log(values);
+    const { total } = await userRepo.query({
+      equal: { name: values.name, email: values.email },
+      page: 0,
+      pageSize: 10,
+    });
 
+    if (total > 0) {
+      login(values.name);
+      toast.success("登入成功");
+    } else {
+      toast.error("登入失敗");
+    }
+  };
   return (
     <div className="flex w-full h-full items-center justify-center ">
-      <div className="w-[500px] h-[300px] bg-white/60 mx-auto flex flex-col gap-5 p-[20px] rounded-md shadow-xs ">
+      <div className="w-[500px] h-[300px] bg-white/60 mx-auto flex flex-col gap-3 p-[20px] rounded-md shadow-xs ">
         <h1 className="text-2xl font-bold">登入</h1>
         <>
-          <Label htmlFor="acc">請輸入帳號名稱</Label>
-          <Input
-            id="acc"
-            type="text"
-            placeholder="註冊的帳號名稱，僅限英文數字"
-            value={username}
-            onChange={handleInputChange}
-          ></Input>
-          <Label htmlFor="acc">請輸入電子郵件</Label>
-          <Input
-            id="acc"
-            type="text"
-            placeholder="註冊的電子郵件"
-            value={email}
-            onChange={(e) => {
-              setEmail(e.target.value);
-            }}
-          ></Input>
-          <div className="flex justify-end">
-            <Button
-              className="w-20"
-              onClick={() => {
-                handleSubmit();
-              }}
-            >
-              送出
-            </Button>
-          </div>
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+              <FormField
+                rules={{
+                  required: "請輸入名稱",
+                  pattern: {
+                    value: /^[A-Za-z0-9_]+$/,
+                    message: "只能輸入英文、數字或底線",
+                  },
+                }}
+                control={form.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>帳號名稱</FormLabel>
+                    <FormControl>
+                      <Input placeholder="exampleAccount" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                rules={{
+                  required: "請輸入名稱",
+                  pattern: {
+                    value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                    message: "請輸入有效的電子郵件地址",
+                  },
+                }}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>電子郵件</FormLabel>
+                    <FormControl>
+                      <Input placeholder="example@gmail.com" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <div className="flex justify-end">
+                <Button className="w-20" type="submit">
+                  送出
+                </Button>
+              </div>
+            </form>
+          </Form>
         </>
       </div>
     </div>

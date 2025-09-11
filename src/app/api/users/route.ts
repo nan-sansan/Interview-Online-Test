@@ -3,7 +3,6 @@ import { dataPool } from "@/app/api/_data/users";
 
 export async function POST(request: Request) {
   const user: User = await request.json();
-  console.log(user);
   const allUser = dataPool.getAll();
   const found = allUser.find(({ name, email }) => {
     return user.name === name || user.email === email;
@@ -20,7 +19,9 @@ export async function POST(request: Request) {
     );
   } else {
     dataPool.add(user);
-    return Response.json({ message: "新增成功" });
+    const all = dataPool.getAll();
+    const lastUser = all[all.length - 1];
+    return Response.json({ message: "新增成功", user: lastUser });
   }
 }
 

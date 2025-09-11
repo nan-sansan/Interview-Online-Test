@@ -9,12 +9,14 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { User } from "@/types/User";
 import { addUserApi } from "@/apis/users";
+import { useUserRepo } from "@/hooks/useUserRepo";
 
 export default function RegisterPage() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [gender, setGender] = useState("O");
   const router = useRouter();
+  const userRepo = useUserRepo();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const regex = /^[A-Za-z0-9]*$/; // 正則表達，只允許英文&數字
@@ -40,12 +42,13 @@ export default function RegisterPage() {
       status: "active",
     };
 
-    if (!(await addUserApi(newUser))) {
-      toast.error("註冊失敗");
-    } else {
+    try {
+      await userRepo.create(newUser);
       toast.success("註冊成功");
       //註冊完直接登入
       router.push("/login");
+    } catch {
+      toast.error("註冊失敗");
     }
   };
   return (

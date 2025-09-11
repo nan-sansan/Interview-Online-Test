@@ -17,9 +17,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useEffect, useState } from "react";
-import { deleteUsersApi, getUsersApi, updateUsersApi } from "@/apis/users";
+import { useCallback, useEffect, useState } from "react";
 import { User } from "@/types/User";
+import { useUserRepo } from "@/hooks/useUserRepo";
 
 export default function ListPage() {
   const [users, setUsers] = useState<User[]>([]);
@@ -27,25 +27,26 @@ export default function ListPage() {
   const [size, setSize] = useState(10);
   const [total, setTotal] = useState(0);
 
-  useEffect(() => {
-    const loadData = async () => {
-      const { users, total } = await getUsersApi({ page, size });
-      setUsers(users);
+  const userRepo = useUserRepo();
+
+  const loadData = useCallback(
+    async (page: number, size: number) => {
+      const { content, total } = await userRepo.query({ page, pageSize: size });
+      setUsers(content);
       setTotal(total);
-    };
-    void loadData();
-  }, [page, size]);
+    },
+    [userRepo],
+  );
+
+  useEffect(() => {
+    void loadData(page, size);
+  }, [page, size, loadData]);
 
   async function handleDelete(userId: string, username: string) {
-    const loadData = async () => {
-      const { users, total } = await getUsersApi({ page, size });
-      setUsers(users);
-      setTotal(total);
-    };
     const isConfirm = confirm(`確定要刪除 ${username} 用戶？`);
     if (isConfirm) {
-      await deleteUsersApi(userId);
-      await loadData();
+      await userRepo.delete({ id: userId } as User);
+      await loadData(page, size);
     }
   }
   return (
@@ -72,7 +73,7 @@ export default function ListPage() {
                     <Select
                       defaultValue={user.status}
                       onValueChange={async (value: "active" | "inactive") =>
-                        await updateUsersApi({ ...user, status: value })
+                        await userRepo.update({ ...user, status: value })
                       }
                     >
                       <SelectTrigger className="w-[180px]">

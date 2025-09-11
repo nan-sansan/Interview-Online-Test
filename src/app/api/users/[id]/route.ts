@@ -9,8 +9,10 @@ export async function PUT(
   user.id = (await params).id;
 
   dataPool.update(user);
+
   return Response.json({
     message: "修改成功",
+    user: user,
   });
 }
 
