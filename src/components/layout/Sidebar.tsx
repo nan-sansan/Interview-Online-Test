@@ -14,6 +14,8 @@ export default function Sidebar() {
     <ul className="w-[150px] h-full bg-yellow-50/50 flex flex-col border-r">
       {workRoute.map((route, index) => {
         const Icon = route.icon;
+        if (route.loginDisable && name) return null;
+        if (!route.loginDisable && !name) return null;
         return (
           <li
             className={cn(
@@ -22,10 +24,6 @@ export default function Sidebar() {
             )}
             key={index}
             onClick={() => {
-              if (name && route.loginDisable) {
-                toast.error("您已登入");
-                return;
-              }
               router.push(route.path);
             }}
           >

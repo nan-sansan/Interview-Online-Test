@@ -1,7 +1,6 @@
 "use client";
 
 import { useAuthStore } from "@/stores/userStore";
-import Link from "next/link";
 import { LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -12,7 +11,7 @@ export default function WelcomePage() {
   const { name, logout } = useAuthStore();
   const router = useRouter();
   return (
-    <div className="flex w-full h-full items-center justify-center">
+    <div className="flex w-[calc(100%-150px)] h-[calc(100%-50px)] items-center justify-center">
       <div className="w-[800px] p-[20px] mx-auto flex flex-col items-center justify-center gap-8 rounded-md">
         {name && (
           <div className="flex justify-center items-center gap-1">
@@ -30,19 +29,18 @@ export default function WelcomePage() {
         <div className="flex gap-6">
           {workRoute.map((route, index) => {
             const Icon = route.icon;
+            if (route.loginDisable && name) return null;
+            if (!route.loginDisable && !name) return null;
             return (
               <div
                 onClick={() => {
-                  if (name && route.loginDisable) {
-                    return;
-                  }
                   router.push(route.path);
                 }}
                 key={index}
               >
                 <div
                   className={cn(
-                    "bg-white/60 hover:bg-white/80 hover:shadow-md transition-all duration-75 w-[150px] h-[150px]",
+                    "bg-white/60 cursor-pointer hover:bg-white/80 hover:shadow-md transition-all duration-75 w-[150px] h-[150px]",
                     "pb-3 pr-3 text-xl rounded-md shadow-xs border-1 border-green-50",
                     "flex flex-col gap-1 items-end justify-end",
                     "hover:shadow-sm hover:border-gray-50 hover:translate-y-[-4px] hover:scale-105",

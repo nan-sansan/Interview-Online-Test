@@ -1,8 +1,6 @@
 "use client";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/stores/userStore";
 import { useForm } from "react-hook-form";
 import {
@@ -16,21 +14,16 @@ import {
 import { User } from "@/types/User";
 import { useUserRepo } from "@/hooks/useUserRepo";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
+  const { login } = useAuthStore();
   const router = useRouter();
-  const { name, login } = useAuthStore();
   const form = useForm<User>({
     defaultValues: { name: "", email: "" },
     mode: "onChange",
   });
   const userRepo = useUserRepo();
-
-  useEffect(() => {
-    if (name) {
-      router.push("/");
-    }
-  }, [name, router]);
 
   const onSubmit = async (values: User) => {
     console.log(values);
@@ -43,12 +36,13 @@ export default function LoginPage() {
     if (total > 0) {
       login(values.name);
       toast.success("登入成功");
+      router.push("/");
     } else {
       toast.error("登入失敗");
     }
   };
   return (
-    <div className="flex w-full h-full items-center justify-center ">
+    <div className="flex w-[calc(100%-150px)] h-[calc(100%-50px)] items-center justify-center ">
       <div className="w-[500px] h-[300px] bg-white/60 mx-auto flex flex-col gap-3 p-[20px] rounded-md shadow-xs ">
         <h1 className="text-2xl font-bold">登入</h1>
         <>
@@ -77,7 +71,7 @@ export default function LoginPage() {
               <FormField
                 control={form.control}
                 rules={{
-                  required: "請輸入名稱",
+                  required: "請輸入電子郵件",
                   pattern: {
                     value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
                     message: "請輸入有效的電子郵件地址",
