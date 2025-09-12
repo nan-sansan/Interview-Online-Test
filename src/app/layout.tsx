@@ -2,10 +2,9 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "sonner";
-import { Switch } from "@/components/ui/switch";
-import { Label } from "@/components/ui/label";
 import Header from "@/components/layout/Header";
 import Sidebar from "@/components/layout/Sidebar";
+import AuthGuard from "@/components/layout/AuthGuard";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -35,7 +34,9 @@ export default function RootLayout({
         <Header />
         <div className="flex h-[calc(100%-50px)]">
           <Sidebar />
-          <main className="w-[calc(100%-150px)] h-full">{children}</main>
+          <AuthGuard>
+            <main className="w-[calc(100%-150px)] h-full">{children}</main>
+          </AuthGuard>
           <Toaster position={"top-center"} richColors />
         </div>
       </body>
