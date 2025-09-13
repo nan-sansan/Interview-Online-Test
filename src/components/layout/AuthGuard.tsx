@@ -32,6 +32,10 @@ export default function AuthGuard({ children }: AuthGuardProps) {
   if (isShow) {
     return <>{children}</>;
   } else {
-    return <>{name ? "使用者已登入" : "使用者未登入"}</>;
+    return (
+      <div className="w-[calc(100%-300px)] h-full text-xl font-bold flex justify-center items-center">
+        {name ? "使用者已登入" : "使用者未登入"}
+      </div>
+    );
   }
 }
