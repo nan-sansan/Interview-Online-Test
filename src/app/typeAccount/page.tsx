@@ -4,12 +4,10 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { toast } from "sonner";
-import { useAuthStore } from "@/stores/userStore";
 
 export default function TypeAccount() {
   const [value, setValue] = useState("");
   const [submitted, setSubmitted] = useState("");
-  const { name } = useAuthStore();
   const handleSubmit = () => {
     if (!value.trim()) {
       toast.error("請輸入有效帳號");
@@ -18,11 +16,7 @@ export default function TypeAccount() {
     setSubmitted(value.trim());
   };
 
-  return name ? (
-    <div className="w-[calc(100%-150px)] h-[calc(100%-100px)] flex items-center justify-center text-xl font-bold ">
-      HI!{name}
-    </div>
-  ) : (
+  return (
     <div className="flex w-full h-full items-center justify-center">
       <div className="flex flex-col justify-center gap-5 mx-auto w-[500px] h-[250px] bg-white/60 p-[20px] rounded-md ">
         <h1 className="text-2xl font-bold">名稱顯示</h1>

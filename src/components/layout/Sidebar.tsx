@@ -3,7 +3,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { workRoute } from "@/config/config";
 import { cn } from "@/lib/utils";
 import { useAuthStore } from "@/stores/userStore";
-import { toast } from "sonner";
+import { isShouldShow } from "@/utils/routeHelper";
 
 export default function Sidebar() {
   const router = useRouter();
@@ -14,23 +14,25 @@ export default function Sidebar() {
     <ul className="w-[150px] h-full bg-yellow-50/50 flex flex-col border-r">
       {workRoute.map((route, index) => {
         const Icon = route.icon;
-        if (route.loginDisable && name) return null;
-        if (!route.loginDisable && !name) return null;
-        return (
-          <li
-            className={cn(
-              "border-b cursor-pointer p-3  hover:bg-green-100/20 flex gap-3",
-              currentPath === route.path && "font-bold text-green-700",
-            )}
-            key={index}
-            onClick={() => {
-              router.push(route.path);
-            }}
-          >
-            <Icon />
-            {route.display}
-          </li>
-        );
+        if (isShouldShow(route, !!name)) {
+          return (
+            <li
+              className={cn(
+                "border-b cursor-pointer p-3  hover:bg-green-100/20 flex gap-3",
+                currentPath === route.path && "font-bold text-green-700",
+              )}
+              key={index}
+              onClick={() => {
+                router.push(route.path);
+              }}
+            >
+              <Icon />
+              {route.display}
+            </li>
+          );
+        } else {
+          return null;
+        }
       })}
     </ul>
   );
