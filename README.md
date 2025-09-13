@@ -10,7 +10,7 @@
 ```bash
 node -v
 ```
-本次使用node 10.9.3
+本次使用npm 10.9.3
 ```bash
 npm-v
 ```
